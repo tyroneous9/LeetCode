@@ -30,17 +30,17 @@ int lengthOfLongestSubstring(string s) {
     unordered_map<char, int> usedChars;
     int longestLength = 0;
     int currentLength = 0;
-    for (int i = 0, root = 0; i < s.length(); i++) {
-        if (usedChars.find(s[i]) == usedChars.end()) { //not repeating
-            usedChars[s[i]] = i;
+    for (int i = 0, root = 0; i < s.length(); i++) {  
+        if (usedChars.find(s[i]) != usedChars.end() && usedChars[s[i]] >= root) { //char exists AND is after root
+            root = usedChars[s[i]]+1; //move root 1 after repeating char
+            currentLength = i-root+1; //update length from root to new char
+        }
+        else {
             currentLength += 1;
-            if (currentLength > longestLength) {
-                longestLength = currentLength;
-            } 
-        } else { //repeating
-            root = usedChars[s[i]]+1;
-            usedChars[s[i]] = i;
-            currentLength = i-root;
+        }
+        usedChars[s[i]] = i; //update current char pos
+        if (currentLength > longestLength) {
+            longestLength = currentLength;
         }
     }
     return longestLength;
@@ -48,9 +48,11 @@ int lengthOfLongestSubstring(string s) {
 
 int main()
 {
+    std::cout << lengthOfLongestSubstring(" ") << "\n"; //1
+    std::cout << lengthOfLongestSubstring("c") << "\n"; //1
     std::cout << lengthOfLongestSubstring("abcabcbb") << "\n"; //3
     std::cout << lengthOfLongestSubstring("pwwkew") << "\n"; //3
     std::cout << lengthOfLongestSubstring("dvdf") << "\n"; //3
-
+    std::cout << lengthOfLongestSubstring("tmmzuxt") << "\n"; //5
 
 }
